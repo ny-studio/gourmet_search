@@ -30,12 +30,13 @@ class SearchActivity : AppCompatActivity(), LocationListener {
     //検索条件の変数
     var latitude:Double = 0.0 // 緯度
     var longitude:Double = 0.0 // 軽度
-    var radius = 5 // 検索範囲
+    var radius = 5 // 検索範囲　1: 300m　2: 500m　3: 1000m (初期値)　4: 2000m　5: 3000m
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+        //検索ビュー
         val searchView = findViewById<SearchView>(R.id.search_view)
         searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String): Boolean {
@@ -57,29 +58,31 @@ class SearchActivity : AppCompatActivity(), LocationListener {
                 this,
                 Manifest.permission.ACCESS_FINE_LOCATION
             ) == PackageManager.PERMISSION_GRANTED -> {
-                //GPSを起動
+
                 val locationManager: LocationManager = getSystemService(LOCATION_SERVICE) as LocationManager
+                //GPSを起動
                 locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000, 1f, this)
 
                 //最後に確認された位置情報を取得
                 val location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER)
                 if(location != null){
-                    latitude = location.latitude
-                    longitude = location.longitude
+                    latitude = location.latitude    //緯度
+                    longitude = location.longitude  //経度
                 }
             }
             else -> {
+                //警告メッセージを表示
                 Toast.makeText(applicationContext, "位置情報が許可されていません。", Toast.LENGTH_SHORT).show()
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                     //権限許可をリクエストする
-                    requestPermissions(arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),1)
+                    requestPermissions(arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),0)
                 }
             }
         }
     }
 
     override fun onLocationChanged(location: Location) {
-        //緯度軽度を更新
+        //緯度経度を更新
         latitude = location.latitude
         longitude = location.longitude
     }
@@ -112,7 +115,9 @@ class SearchActivity : AppCompatActivity(), LocationListener {
                         val name = xPath.evaluate("./name/text()",shop)
                         val logo = xPath.evaluate("./logo_image/text()",shop)
                         val address = xPath.evaluate("./address/text()",shop)
-                        println(name)
+                        val genre = xPath.evaluate("./genre/name/text()",shop)
+                        print(name)
+                        println(genre)
                         println(logo)
                         println(address)
                     }
