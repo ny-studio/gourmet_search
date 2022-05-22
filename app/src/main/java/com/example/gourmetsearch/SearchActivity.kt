@@ -1,6 +1,7 @@
 package com.example.gourmetsearch
 
 import android.Manifest
+import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
@@ -10,12 +11,18 @@ import android.location.LocationManager
 import android.os.AsyncTask
 import android.os.Build
 import android.os.Bundle
+import android.provider.Settings
+import android.util.Log
+import android.view.View
+import android.widget.ProgressBar
 import android.widget.SearchView
 import android.widget.Toast
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.loader.content.AsyncTaskLoader
 import androidx.loader.content.Loader
+import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import okhttp3.ResponseBody
@@ -46,6 +53,9 @@ class SearchActivity : AppCompatActivity(), LocationListener {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+        //アクションバーを非表示
+        supportActionBar?.hide()
+
         //検索ビュー
         val searchView = findViewById<SearchView>(R.id.search_view)
 
@@ -56,14 +66,19 @@ class SearchActivity : AppCompatActivity(), LocationListener {
             }
 
             override fun onQueryTextChange(newText: String?): Boolean {
-                if (!restaurantsData.isEmpty()) {
-                    restaurantsData.clear()
-                }
+                restaurantsData.clear()
+                updateRecyclerView()
                 return false
             }
         })
 
-
+        searchView.setOnCloseListener(object : SearchView.OnCloseListener{
+            override fun onClose(): Boolean {
+                restaurantsData.clear()
+                updateRecyclerView()
+                return false
+            }
+        })
     }
 
     override fun onResume() {
@@ -112,11 +127,24 @@ class SearchActivity : AppCompatActivity(), LocationListener {
                     response: Response<ResponseBody>
                 ) {
                     response.body()?.let {
-                        parseXML(it.string())
+                        //xmlから店情報を取得する
+                        restaurantsData = parseXML(it.string())
+
+                        println(response);
+
+                        val recyclerView = findViewById<RecyclerView>(R.id.recycler_view)
+                        recyclerView.layoutManager = GridLayoutManager(applicationContext, 2)
+
+                        for (r in restaurantsData) {
+                            downloadImage(r).executeOnExecutor(
+                                AsyncTask.THREAD_POOL_EXECUTOR,
+                                r.logoImageText
+                            )
+                        }
+
+                        val adapter = MyRecyclerViewAdapter(restaurantsData)
+                        recyclerView.adapter = adapter
                     }
-                    val recyclerView = findViewById<RecyclerView>(R.id.recycler_view)
-                    recyclerView.adapter = MyRecyclerViewAdapter(restaurantsData)
-                    recyclerView.layoutManager = LinearLayoutManager(applicationContext)
                 }
 
                 override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
@@ -125,7 +153,7 @@ class SearchActivity : AppCompatActivity(), LocationListener {
             })
     }
 
-    fun parseXML(xml: String) {
+    fun parseXML(xml: String): ArrayList<RestaurantData> {
         //xmlを解析してDOM Documentに変換するビルダー
         val builder = DocumentBuilderFactory.newInstance().newDocumentBuilder()
         //xmlを解析してDOM Documentを生成
@@ -137,6 +165,13 @@ class SearchActivity : AppCompatActivity(), LocationListener {
 
         //shopノードをすべて取得
         val shops = xPath.evaluate("//shop", document, XPathConstants.NODESET) as NodeList
+
+        if(shops.length == 0){
+            Toast.makeText(applicationContext, "お店が見つかりませんでした。\nキーワード・条件を変えてみましょう。", Toast.LENGTH_SHORT).show()
+        }
+
+        val restaurantsData: ArrayList<RestaurantData> = arrayListOf<RestaurantData>()
+
         for (i in 0 until shops.length) {
             val shop = shops.item(i)
             val name = xPath.evaluate("./name/text()", shop)
@@ -144,14 +179,15 @@ class SearchActivity : AppCompatActivity(), LocationListener {
             val address = xPath.evaluate("./address/text()", shop)
             val genre = xPath.evaluate("./genre/name/text()", shop)
 
-            var restaurantData = RestaurantData(shop, "0", name, address,null , genre)
-
-            downloadImage(restaurantData).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR,logo)
+            val restaurantData = RestaurantData(shop, "0", name, address, logo, null, genre)
+            restaurantsData.add(restaurantData)
         }
+
+        return restaurantsData
     }
 
-    private inner class downloadImage(var restaurantData: RestaurantData) : AsyncTask<String,Int,Bitmap>() {
-
+    private inner class downloadImage(var restaurantData: RestaurantData) :
+        AsyncTask<String, Int, Bitmap>() {
         override fun doInBackground(vararg params: String?): Bitmap {
             val url = URL(params[0])
             val input = url.openStream()
@@ -159,9 +195,16 @@ class SearchActivity : AppCompatActivity(), LocationListener {
             return image
         }
 
-        override fun onPostExecute(bitmap: Bitmap?){
+        override fun onPostExecute(bitmap: Bitmap?) {
             restaurantData.logoImage = bitmap
-            restaurantsData.add(restaurantData)
+
+            //画像がインストールされたあとリサイクラービューを更新
+            updateRecyclerView()
         }
+    }
+
+    fun updateRecyclerView(){
+        val recyclerView = findViewById<RecyclerView>(R.id.recycler_view)
+        recyclerView.adapter?.notifyDataSetChanged()
     }
 }
