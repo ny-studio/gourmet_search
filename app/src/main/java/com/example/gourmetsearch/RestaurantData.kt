@@ -10,6 +10,7 @@ data class RestaurantData(
     var id:String,
     var name:String,
     var address:String,
+    var logoImageText:String?,
     var logoImage: Bitmap?,
     var genre:String,
 )
