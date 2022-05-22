@@ -10,18 +10,51 @@
         android:orientation="vertical"
         android:padding="16dp">
 
-        <ImageView
-            android:id="@+id/item_image"
+        <FrameLayout
             android:layout_width="match_parent"
-            android:layout_height="194dp"
-            android:importantForAccessibility="no"
-            android:scaleType="centerCrop" />
+            android:layout_height="wrap_content">
+
+            <ImageView
+                android:id="@+id/item_image"
+                android:layout_gravity="center"
+                android:layout_width="70dp"
+                android:layout_height="wrap_content"
+                android:adjustViewBounds="true"
+                android:importantForAccessibility="no"
+                android:scaleType="centerCrop" />
+
+            <ProgressBar
+                android:id="@+id/loadimage_progress"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:visibility="visible"/>
+        </FrameLayout>
 
         <TextView
             android:id="@+id/item_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:padding="16dp"
+            android:textSize="17dp"
+            android:padding="3dp"
+            android:textAppearance="?attr/textAppearanceHeadline6" />
+
+        <TextView
+            android:id="@+id/item_genre"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="15dp"
+            android:padding="3dp"
+            android:textColor="#CA5959"
+            android:textAppearance="?attr/textAppearanceHeadline6" />
+
+        <TextView
+            android:id="@+id/item_address"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="13dp"
+            android:padding="3dp"
+            android:textColor="#4A4A4A"
             android:textAppearance="?attr/textAppearanceHeadline6" />
 
     </LinearLayout>
