@@ -2,4 +2,12 @@
     <string name="app_name">GourmetSearch</string>
     <string name="api_key">02eb467934af0e61</string>
     <string name="title_activity_maps">MapsActivity</string>
+
+    <string-array name="range_list">
+        <item>300m</item>
+        <item>500m</item>
+        <item>1000m</item>
+        <item>2000m</item>
+        <item>3000m</item>
+    </string-array>
 </resources>
