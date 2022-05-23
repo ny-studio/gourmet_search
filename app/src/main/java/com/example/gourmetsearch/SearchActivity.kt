@@ -1,7 +1,7 @@
 package com.example.gourmetsearch
 
 import android.Manifest
-import android.content.Intent
+import android.content.Context
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
@@ -11,19 +11,10 @@ import android.location.LocationManager
 import android.os.AsyncTask
 import android.os.Build
 import android.os.Bundle
-import android.provider.Settings
-import android.util.Log
-import android.view.View
-import android.widget.ProgressBar
-import android.widget.SearchView
-import android.widget.Toast
-import androidx.annotation.RequiresApi
+import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
-import androidx.loader.content.AsyncTaskLoader
-import androidx.loader.content.Loader
 import androidx.recyclerview.widget.GridLayoutManager
-import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import okhttp3.ResponseBody
 import org.w3c.dom.NodeList
@@ -31,20 +22,17 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import java.io.ByteArrayInputStream
-import java.io.StringReader
 import java.net.URL
 import javax.xml.parsers.DocumentBuilderFactory
 import javax.xml.xpath.XPathConstants
 import javax.xml.xpath.XPathFactory
 
 class SearchActivity : AppCompatActivity(), LocationListener {
-
     val service = RetrofitClient.getService()
 
     //検索条件の変数
     var latitude: Double = 0.0 // 緯度
     var longitude: Double = 0.0 // 経度
-    var radius = 5 // 検索範囲　1: 300m　2: 500m　3: 1000m (初期値)　4: 2000m　5: 3000m
 
     //リスト表示するデータ
     var restaurantsData: ArrayList<RestaurantData> = arrayListOf<RestaurantData>()
@@ -59,6 +47,14 @@ class SearchActivity : AppCompatActivity(), LocationListener {
         //検索ビュー
         val searchView = findViewById<SearchView>(R.id.search_view)
 
+        //オプションボタン
+        val optionButton = findViewById<ImageButton>(R.id.option_button)
+
+        //main.xmlを読み込む
+        val dropDownMenu = PopupMenu(applicationContext, optionButton)
+        val menu = dropDownMenu.menu
+        dropDownMenu.menuInflater.inflate(R.menu.main, menu)
+
         searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String): Boolean {
                 requestRestaurantData(query)
@@ -72,13 +68,25 @@ class SearchActivity : AppCompatActivity(), LocationListener {
             }
         })
 
-        searchView.setOnCloseListener(object : SearchView.OnCloseListener{
+        searchView.setOnCloseListener(object : SearchView.OnCloseListener {
             override fun onClose(): Boolean {
                 restaurantsData.clear()
                 updateRecyclerView()
                 return false
             }
         })
+
+        optionButton.setOnClickListener {
+            dropDownMenu.show()
+        }
+
+        dropDownMenu.setOnMenuItemClickListener {
+            if (it.itemId == R.id.option) {
+                val dialog = OptionDialogFragment()
+                dialog.show(supportFragmentManager, "option")
+            }
+            true
+        }
     }
 
     override fun onResume() {
@@ -120,7 +128,11 @@ class SearchActivity : AppCompatActivity(), LocationListener {
     }
 
     fun requestRestaurantData(keyword: String) {
-        service.getRestaurantData(getString(R.string.api_key), keyword, latitude, longitude, radius)
+        val sharedPref = getSharedPreferences("search_params", Context.MODE_PRIVATE)
+
+        val range = sharedPref.getInt("range",3)
+
+        service.getRestaurantData(getString(R.string.api_key), keyword, latitude, longitude, range)
             .enqueue(object : Callback<ResponseBody> {
                 override fun onResponse(
                     call: Call<ResponseBody>,
@@ -130,7 +142,7 @@ class SearchActivity : AppCompatActivity(), LocationListener {
                         //xmlから店情報を取得する
                         restaurantsData = parseXML(it.string())
 
-                        println(response);
+                        println(response)
 
                         val recyclerView = findViewById<RecyclerView>(R.id.recycler_view)
                         recyclerView.layoutManager = GridLayoutManager(applicationContext, 2)
@@ -166,8 +178,12 @@ class SearchActivity : AppCompatActivity(), LocationListener {
         //shopノードをすべて取得
         val shops = xPath.evaluate("//shop", document, XPathConstants.NODESET) as NodeList
 
-        if(shops.length == 0){
-            Toast.makeText(applicationContext, "お店が見つかりませんでした。\nキーワード・条件を変えてみましょう。", Toast.LENGTH_SHORT).show()
+        if (shops.length == 0) {
+            Toast.makeText(
+                applicationContext,
+                "お店が見つかりませんでした。\nキーワード・条件を変えてみましょう。",
+                Toast.LENGTH_SHORT
+            ).show()
         }
 
         val restaurantsData: ArrayList<RestaurantData> = arrayListOf<RestaurantData>()
@@ -203,7 +219,7 @@ class SearchActivity : AppCompatActivity(), LocationListener {
         }
     }
 
-    fun updateRecyclerView(){
+    fun updateRecyclerView() {
         val recyclerView = findViewById<RecyclerView>(R.id.recycler_view)
         recyclerView.adapter?.notifyDataSetChanged()
     }
