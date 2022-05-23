@@ -1,0 +1,19 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="com.example.androidmenutest.app.MainActivity" >
+
+    <item
+        android:id="@+id/option"
+        android:title="検索条件"
+        android:orderInCategory="1"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/credit"
+        android:title="クレジット"
+        android:orderInCategory="2"
+        app:showAsAction="never"
+        />
+
+</menu>
