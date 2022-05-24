@@ -10,6 +10,6 @@ class MyViewHolder(itemView: View):RecyclerView.ViewHolder(itemView) {
     val logoImage:ImageView = itemView.findViewById(R.id.item_image)
     val nameText:TextView = itemView.findViewById(R.id.item_title)
     val progressBar:ProgressBar = itemView.findViewById(R.id.loadimage_progress)
-    val addressText:TextView = itemView.findViewById(R.id.item_address)
+    val accessText:TextView = itemView.findViewById(R.id.item_access)
     val genreText:TextView = itemView.findViewById(R.id.item_genre)
 }
