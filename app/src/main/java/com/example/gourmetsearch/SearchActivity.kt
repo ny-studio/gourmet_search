@@ -177,11 +177,16 @@ class SearchActivity : AppCompatActivity(), LocationListener {
 
         //shopノードをすべて取得
         val shops = xPath.evaluate("//shop", document, XPathConstants.NODESET) as NodeList
-
         if (shops.length == 0) {
             Toast.makeText(
                 applicationContext,
                 "お店が見つかりませんでした。\nキーワード・条件を変えてみましょう。",
+                Toast.LENGTH_SHORT
+            ).show()
+        }else{
+            Toast.makeText(
+                applicationContext,
+                "${shops.length}件のお店が見つかりました。",
                 Toast.LENGTH_SHORT
             ).show()
         }
@@ -192,10 +197,10 @@ class SearchActivity : AppCompatActivity(), LocationListener {
             val shop = shops.item(i)
             val name = xPath.evaluate("./name/text()", shop)
             val logo = xPath.evaluate("./logo_image/text()", shop)
-            val address = xPath.evaluate("./address/text()", shop)
+            val access = xPath.evaluate("./mobile_access/text()", shop)
             val genre = xPath.evaluate("./genre/name/text()", shop)
 
-            val restaurantData = RestaurantData(shop, "0", name, address, logo, null, genre)
+            val restaurantData = RestaurantData(shop, "0", name, access, logo, null, genre)
             restaurantsData.add(restaurantData)
         }
 
@@ -213,7 +218,6 @@ class SearchActivity : AppCompatActivity(), LocationListener {
 
         override fun onPostExecute(bitmap: Bitmap?) {
             restaurantData.logoImage = bitmap
-
             //画像がインストールされたあとリサイクラービューを更新
             updateRecyclerView()
         }
