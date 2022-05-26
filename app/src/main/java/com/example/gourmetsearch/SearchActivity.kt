@@ -84,6 +84,9 @@ class SearchActivity : AppCompatActivity(), LocationListener {
             if (it.itemId == R.id.option) {
                 val dialog = OptionDialogFragment()
                 dialog.show(supportFragmentManager, "option")
+            }else if(it.itemId == R.id.credit){
+                val dialog = CreditDialogFragment()
+                dialog.show(supportFragmentManager,"credit")
             }
             true
         }
@@ -97,7 +100,6 @@ class SearchActivity : AppCompatActivity(), LocationListener {
                 this,
                 Manifest.permission.ACCESS_FINE_LOCATION
             ) == PackageManager.PERMISSION_GRANTED -> {
-
                 val locationManager: LocationManager =
                     getSystemService(LOCATION_SERVICE) as LocationManager
                 //GPSを起動
@@ -129,10 +131,17 @@ class SearchActivity : AppCompatActivity(), LocationListener {
 
     fun requestRestaurantData(keyword: String) {
         val sharedPref = getSharedPreferences("search_params", Context.MODE_PRIVATE)
+        val range = sharedPref.getInt("range", 3)
 
-        val range = sharedPref.getInt("range",3)
-
-        service.getRestaurantData(getString(R.string.api_key), keyword, latitude, longitude, range)
+        val recyclerView = findViewById<RecyclerView>(R.id.recycler_view)
+        recyclerView.layoutManager = GridLayoutManager(applicationContext, 2)
+        service.getRestaurantData(
+            getString(R.string.api_key),
+            keyword,
+            latitude,
+            longitude,
+            range,
+        )
             .enqueue(object : Callback<ResponseBody> {
                 override fun onResponse(
                     call: Call<ResponseBody>,
@@ -141,11 +150,8 @@ class SearchActivity : AppCompatActivity(), LocationListener {
                     response.body()?.let {
                         //xmlから店情報を取得する
                         restaurantsData = parseXML(it.string())
-
-                        println(response)
-
-                        val recyclerView = findViewById<RecyclerView>(R.id.recycler_view)
-                        recyclerView.layoutManager = GridLayoutManager(applicationContext, 2)
+                        val adapter = MyRecyclerViewAdapter(restaurantsData)
+                        recyclerView.adapter = adapter
 
                         for (r in restaurantsData) {
                             downloadImage(r).executeOnExecutor(
@@ -153,14 +159,12 @@ class SearchActivity : AppCompatActivity(), LocationListener {
                                 r.logoImageText
                             )
                         }
-
-                        val adapter = MyRecyclerViewAdapter(restaurantsData)
-                        recyclerView.adapter = adapter
                     }
                 }
 
                 override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
-                    Toast.makeText(applicationContext, "お店が見つかりませんでした。", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(applicationContext, "お店が見つかりませんでした。", Toast.LENGTH_SHORT)
+                        .show()
                 }
             })
     }
@@ -183,10 +187,11 @@ class SearchActivity : AppCompatActivity(), LocationListener {
                 "お店が見つかりませんでした。\nキーワード・条件を変えてみましょう。",
                 Toast.LENGTH_SHORT
             ).show()
-        }else{
+        } else {
+            val available = xPath.evaluate("./results/results_available/text()", document)
             Toast.makeText(
                 applicationContext,
-                "${shops.length}件のお店が見つかりました。",
+                "${available}件のお店が見つかりました。",
                 Toast.LENGTH_SHORT
             ).show()
         }
