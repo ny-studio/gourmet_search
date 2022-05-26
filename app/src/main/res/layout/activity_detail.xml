@@ -4,167 +4,177 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <ScrollView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
 
-        <LinearLayout
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        tools:ignore="MissingConstraints">
+
+        <ScrollView
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:padding="10dp"
-            tools:ignore="MissingConstraints">
+            android:layout_height="match_parent">
 
             <LinearLayout
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:padding="5dp">
+                android:orientation="vertical"
+                android:padding="10dp"
+                tools:ignore="MissingConstraints">
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:padding="5dp">
+
+                    <ImageView
+                        android:id="@+id/item_logo_image"
+                        android:layout_width="100dp"
+                        android:layout_height="100dp"
+                        android:layout_gravity="center"
+                        android:layout_margin="10dp"
+                        android:adjustViewBounds="true"
+                        android:importantForAccessibility="no"
+                        android:scaleType="centerCrop" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:id="@+id/item_name"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:padding="3dp"
+                            android:text="店"
+                            android:textColor="@color/black"
+                            android:textSize="20dp" />
+
+                        <TextView
+                            android:id="@+id/item_genre"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:padding="3dp"
+                            android:text="ジャンル"
+                            android:textColor="#CA5959"
+                            android:textSize="15dp" />
+
+                        <TextView
+                            android:id="@+id/item_catch"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:padding="3dp"
+                            android:text="キャッチ"
+                            android:textColor="@color/black"
+                            android:textSize="17dp" />
+
+                    </LinearLayout>
+
+                </LinearLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginVertical="10dp"
+                    android:background="?android:attr/listDivider" />
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/item_address"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:drawableLeft="@drawable/ic_action_place"
+                        android:padding="3dp"
+                        android:text="住所"
+                        android:textColor="#000000"
+                        android:textSize="17dp" />
+
+                    <TextView
+                        android:id="@+id/item_access"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginHorizontal="20dp"
+                        android:textColor="#4A4A4A"
+                        android:textSize="15dp" />
+
+                </LinearLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_marginVertical="5dp"
+                    android:background="?android:attr/listDivider" />
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:drawableLeft="@drawable/ic_action_time"
+                        android:gravity="center"
+                        android:padding="3dp"
+                        android:text="営業時間"
+                        android:textColor="@color/black"
+                        android:textSize="17dp" />
+
+                    <TextView
+                        android:id="@+id/item_open_time"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginHorizontal="20dp"
+                        android:textColor="#4A4A4A"
+                        android:textSize="15dp" />
+
+                </LinearLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginVertical="10dp"
+                    android:background="?android:attr/listDivider" />
 
                 <ImageView
-                    android:id="@+id/item_logo_image"
-                    android:layout_width="100dp"
-                    android:layout_height="100dp"
+                    android:id="@+id/item_content_image"
+                    android:layout_width="200dp"
+                    android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:layout_margin="10dp"
+                    android:layout_marginTop="20dp"
                     android:adjustViewBounds="true"
                     android:importantForAccessibility="no"
                     android:scaleType="centerCrop" />
 
-                <LinearLayout
+                <View
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:orientation="vertical">
+                    android:layout_height="1dp"
+                    android:layout_marginVertical="20dp"
+                    android:background="?android:attr/listDivider" />
 
-                    <TextView
-                        android:id="@+id/item_name"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:padding="3dp"
-                        android:text="店"
-                        android:textColor="@color/black"
-                        android:textSize="20dp" />
-
-                    <TextView
-                        android:id="@+id/item_genre"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:padding="3dp"
-                        android:text="ジャンル"
-                        android:textColor="#CA5959"
-                        android:textSize="15dp" />
-
-                    <TextView
-                        android:id="@+id/item_catch"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:padding="3dp"
-                        android:text="キャッチ"
-                        android:textColor="@color/black"
-                        android:textSize="17dp" />
-
-                </LinearLayout>
-
-            </LinearLayout>
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:layout_marginVertical="10dp"
-                android:background="?android:attr/listDivider" />
-
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="vertical">
-
-                <TextView
-                    android:id="@+id/item_address"
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/item_web_link"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:drawableLeft="@drawable/ic_action_place"
-                    android:padding="3dp"
-                    android:text="住所"
-                    android:textColor="#000000"
-                    android:textSize="17dp" />
-
-                <TextView
-                    android:id="@+id/item_access"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginHorizontal="20dp"
-                    android:textColor="#4A4A4A"
+                    android:layout_marginLeft="10dp"
+                    android:backgroundTint="#35BF53"
+                    android:drawableLeft="@drawable/ic_action_web_site"
+                    android:padding="6dp"
+                    android:text="web"
+                    android:textColor="#ffffff"
                     android:textSize="15dp" />
 
             </LinearLayout>
 
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_marginVertical="5dp"
-                android:background="?android:attr/listDivider" />
+        </ScrollView>
 
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="vertical">
+    </LinearLayout>
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:drawableLeft="@drawable/ic_action_time"
-                    android:gravity="center"
-                    android:padding="3dp"
-                    android:text="営業時間"
-                    android:textColor="@color/black"
-                    android:textSize="17dp" />
-
-                <TextView
-                    android:id="@+id/item_open_time"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginHorizontal="20dp"
-                    android:textColor="#4A4A4A"
-                    android:textSize="15dp" />
-
-            </LinearLayout>
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:layout_marginVertical="10dp"
-                android:background="?android:attr/listDivider" />
-
-            <ImageView
-                android:id="@+id/item_content_image"
-                android:layout_width="200dp"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_marginTop="20dp"
-                android:adjustViewBounds="true"
-                android:importantForAccessibility="no"
-                android:scaleType="centerCrop" />
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:layout_marginVertical="20dp"
-                android:background="?android:attr/listDivider" />
-
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/item_web_link"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="10dp"
-                android:backgroundTint="#35BF53"
-                android:drawableLeft="@drawable/ic_action_web_site"
-                android:padding="6dp"
-                android:text="web"
-                android:textColor="#ffffff"
-                android:textSize="15dp" />
-
-        </LinearLayout>
-
-    </ScrollView>
 </androidx.constraintlayout.widget.ConstraintLayout>

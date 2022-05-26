@@ -22,11 +22,12 @@ class OptionDialogFragment : DialogFragment() {
         val genreSpinner = dialog.findViewById<Spinner>(R.id.item_genre_spinner)
 
         //スピナーに初期値をセット
-        sharedPref?.let { rangeSpinner.setSelection(it.getInt("range",3) - 1) }
-        sharedPref?.let { genreSpinner.setSelection(it.getInt("genre",0))}
+        sharedPref?.let { rangeSpinner.setSelection(it.getInt("range",3) - 1) } //rangeの初期値は3
+        sharedPref?.let { genreSpinner.setSelection(it.getInt("genre",0))} //genreの初期値は指定なし
 
         //適用ボタン
         dialog.findViewById<Button>(R.id.positive_button).setOnClickListener{
+            //設定を保存する
             val range = rangeSpinner.selectedItemPosition + 1
             sharedPref!!.edit().putInt("range",range).apply()
 
@@ -37,6 +38,7 @@ class OptionDialogFragment : DialogFragment() {
 
         //キャンセルボタン
         dialog.findViewById<Button>(R.id.negative_button).setOnClickListener{
+            //保存せずにダイアログを閉じる
             dialog.cancel()
         }
 

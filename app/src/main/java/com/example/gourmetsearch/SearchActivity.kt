@@ -58,6 +58,7 @@ class SearchActivity : AppCompatActivity(), LocationListener {
 
         searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String): Boolean {
+                //入力されたキーワードでAPIにアクセスする
                 requestRestaurantData(query)
                 return false
             }
@@ -135,11 +136,9 @@ class SearchActivity : AppCompatActivity(), LocationListener {
         val sharedPref = getSharedPreferences("search_params", Context.MODE_PRIVATE)
         val range = sharedPref.getInt("range", 3)
 
-
         val genrecodelist = resources.getStringArray(R.array.genre_code_list)
         val genre = genrecodelist.get(sharedPref.getInt("genre",0))
-
-        println(genre)
+        val count = 100
 
         val recyclerView = findViewById<RecyclerView>(R.id.recycler_view)
         recyclerView.layoutManager = GridLayoutManager(applicationContext, 2)
@@ -149,7 +148,7 @@ class SearchActivity : AppCompatActivity(), LocationListener {
             latitude,
             longitude,
             range,
-            100,
+            count,
             genre,
         )
             .enqueue(object : Callback<ResponseBody> {
@@ -163,7 +162,6 @@ class SearchActivity : AppCompatActivity(), LocationListener {
                         val adapter = MyRecyclerViewAdapter(restaurantsData)
                         recyclerView.adapter = adapter
 
-                        println(response)
                         for (r in restaurantsData) {
                             downloadImage(r).executeOnExecutor(
                                 AsyncTask.THREAD_POOL_EXECUTOR,
