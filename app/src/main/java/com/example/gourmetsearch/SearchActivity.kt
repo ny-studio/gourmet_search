@@ -1,6 +1,7 @@
 package com.example.gourmetsearch
 
 import android.Manifest
+import android.annotation.SuppressLint
 import android.content.Context
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
@@ -129,9 +130,16 @@ class SearchActivity : AppCompatActivity(), LocationListener {
         longitude = location.longitude
     }
 
+    @SuppressLint("ResourceType")
     fun requestRestaurantData(keyword: String) {
         val sharedPref = getSharedPreferences("search_params", Context.MODE_PRIVATE)
         val range = sharedPref.getInt("range", 3)
+
+
+        val genrecodelist = resources.getStringArray(R.array.genre_code_list)
+        val genre = genrecodelist.get(sharedPref.getInt("genre",0))
+
+        println(genre)
 
         val recyclerView = findViewById<RecyclerView>(R.id.recycler_view)
         recyclerView.layoutManager = GridLayoutManager(applicationContext, 2)
@@ -141,6 +149,8 @@ class SearchActivity : AppCompatActivity(), LocationListener {
             latitude,
             longitude,
             range,
+            100,
+            genre,
         )
             .enqueue(object : Callback<ResponseBody> {
                 override fun onResponse(
@@ -153,6 +163,7 @@ class SearchActivity : AppCompatActivity(), LocationListener {
                         val adapter = MyRecyclerViewAdapter(restaurantsData)
                         recyclerView.adapter = adapter
 
+                        println(response)
                         for (r in restaurantsData) {
                             downloadImage(r).executeOnExecutor(
                                 AsyncTask.THREAD_POOL_EXECUTOR,

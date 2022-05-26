@@ -12,5 +12,7 @@ interface ApiService {
         @Query("lat")latitude:Double,
         @Query("lng")longitude:Double,
         @Query("range")radius:Int,
+        @Query("count")count:Int,
+        @Query("genre")genre:String,
     ): Call<ResponseBody>
 }

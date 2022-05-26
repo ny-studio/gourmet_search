@@ -40,6 +40,26 @@
             android:gravity="center"
             android:orientation="horizontal">
 
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="ジャンル" />
+
+            <androidx.appcompat.widget.AppCompatSpinner
+                android:id="@+id/item_genre_spinner"
+                android:layout_width="160dp"
+                android:layout_height="wrap_content"
+                android:entries="@array/genre_name_list"
+                android:backgroundTint="#FF0000"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:gravity="center"
+            android:orientation="horizontal">
+
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/negative_button"
                 android:layout_width="90dp"

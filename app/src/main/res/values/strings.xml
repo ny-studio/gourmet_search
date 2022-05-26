@@ -10,4 +10,46 @@
         <item>2000m</item>
         <item>3000m</item>
     </string-array>
+
+    <string-array name="genre_name_list">
+        <item>指定なし</item>
+        <item>居酒屋</item>
+        <item>ダイニングバー・バル</item>
+        <item>創作料理</item>
+        <item>和食</item>
+        <item>洋食</item>
+        <item>イタリアン・フレンチ</item>
+        <item>中華</item>
+        <item>焼肉・ホルモン</item>
+        <item>アジア・エスニック料理</item>
+        <item>各国料理</item>
+        <item>カラオケ・パーティー</item>
+        <item>バー・カクテル</item>
+        <item>ラーメン</item>
+        <item>カフェ・スイーツ</item>
+        <item>その他グルメ</item>
+        <item>お好み焼き・もんじゃ</item>
+        <item>韓国料理</item>
+    </string-array>
+
+    <string-array name="genre_code_list">
+        <item>0</item>
+        <item>G001</item>
+        <item>G002</item>
+        <item>G003</item>
+        <item>G004</item>
+        <item>G005</item>
+        <item>G006</item>
+        <item>G007</item>
+        <item>G008</item>
+        <item>G009</item>
+        <item>G010</item>
+        <item>G011</item>
+        <item>G012</item>
+        <item>G013</item>
+        <item>G014</item>
+        <item>G015</item>
+        <item>G016</item>
+        <item>G017</item>
+    </string-array>
 </resources>
