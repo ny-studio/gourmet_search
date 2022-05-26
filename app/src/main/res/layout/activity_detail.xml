@@ -152,14 +152,15 @@
                 android:layout_marginVertical="20dp"
                 android:background="?android:attr/listDivider" />
 
-            <Button
+            <com.google.android.material.button.MaterialButton
                 android:id="@+id/item_web_link"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="10dp"
+                android:backgroundTint="#35BF53"
                 android:drawableLeft="@drawable/ic_action_web_site"
-                android:padding="3dp"
-                android:text="ウェブサイト"
+                android:padding="6dp"
+                android:text="web"
                 android:textColor="#ffffff"
                 android:textSize="15dp" />
 
